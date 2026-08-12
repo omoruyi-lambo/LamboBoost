@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faChartLine, faDollarSign, faUsers } from "@fortawesome/free-solid-svg-icons";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatRelativeTime } from "@/lib/utils";
+import { AdminPageHeader } from "./admin-page-header";
+import { AdminTable } from "./admin-table";
 
 interface Props {
   stats: {
@@ -34,72 +35,81 @@ export function AdminOverview({ stats, recentOrders }: Props) {
     .reduce((sum, s) => sum + s.count, 0);
 
   const cards = [
-    { title: "Total Users", value: stats.totalUsers.toLocaleString(), icon: faUsers, color: "text-blue-500" },
-    { title: "Total Orders", value: stats.totalOrders.toLocaleString(), icon: faCartShopping, color: "text-blue-600" },
-    { title: "Total Revenue", value: formatCurrency(stats.totalRevenue), icon: faDollarSign, color: "text-emerald-500" },
-    { title: "Active Orders", value: activeOrders.toLocaleString(), icon: faChartLine, color: "text-slate-600" },
+    {
+      title: "Total Users",
+      value: stats.totalUsers.toLocaleString(),
+      icon: faUsers,
+      chip: "bg-[#E0F2FE] text-[#0369A1]",
+    },
+    {
+      title: "Total Orders",
+      value: stats.totalOrders.toLocaleString(),
+      icon: faCartShopping,
+      chip: "bg-brand-50 text-brand-600",
+    },
+    {
+      title: "Total Revenue",
+      value: formatCurrency(stats.totalRevenue),
+      icon: faDollarSign,
+      chip: "bg-emerald-50 text-emerald-600",
+    },
+    {
+      title: "Active Orders",
+      value: activeOrders.toLocaleString(),
+      icon: faChartLine,
+      chip: "bg-violet-50 text-violet-600",
+    },
   ];
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="font-display text-2xl font-bold text-navy-900">Overview</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Platform summary at a glance.</p>
-      </div>
+      <AdminPageHeader
+        title="Overview"
+        description="Platform summary at a glance."
+      />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {cards.map(({ title, value, icon, color }) => (
-          <Card key={title}>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-sm text-muted-foreground font-medium">{title}</p>
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-muted">
-                  <FontAwesomeIcon icon={icon} className={`h-5 w-5 ${color}`} />
-                </div>
+        {cards.map(({ title, value, icon, chip }) => (
+          <div key={title} className="rounded-2xl border border-line bg-white p-5 shadow-card transition-shadow hover:shadow-card-hover">
+            <div className="mb-4 flex items-center justify-between">
+              <p className="text-sm font-medium text-slate-500">{title}</p>
+              <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${chip}`}>
+                <FontAwesomeIcon icon={icon} className="h-4 w-4" />
               </div>
-              <p className="font-display text-2xl font-bold text-navy-900">{value}</p>
-            </CardContent>
-          </Card>
+            </div>
+            <p className="font-display text-2xl font-bold tracking-tight text-ink">{value}</p>
+          </div>
         ))}
       </div>
 
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Recent Orders</CardTitle>
-          <Link href="/admin/orders" className="text-xs text-primary hover:underline">View all</Link>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border">
-                  {["Order", "User", "Service", "Qty", "Charge", "Status", "Date"].map((h) => (
-                    <th key={h} className="text-left px-6 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {recentOrders.map((o) => (
-                  <tr key={o._id} className="hover:bg-muted/30 transition-colors">
-                    <td className="px-6 py-3 font-mono text-xs text-primary">#{(o._id as string).slice(-8).toUpperCase()}</td>
-                    <td className="px-6 py-3">
-                      <p className="font-medium truncate max-w-[120px]">{o.userId?.name ?? "—"}</p>
-                      <p className="text-xs text-muted-foreground truncate max-w-[120px]">{o.userId?.email}</p>
-                    </td>
-                    <td className="px-6 py-3 truncate max-w-[160px]">{o.serviceId?.name ?? "—"}</td>
-                    <td className="px-6 py-3">{o.quantity.toLocaleString()}</td>
-                    <td className="px-6 py-3 font-medium">{formatCurrency(o.charge)}</td>
-                    <td className="px-6 py-3">
-                      <Badge variant={statusVariant[o.status] ?? "outline"} className="capitalize">{o.status}</Badge>
-                    </td>
-                    <td className="px-6 py-3 text-muted-foreground whitespace-nowrap">{formatRelativeTime(o.createdAt)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
+      <div>
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="font-display text-base font-semibold text-ink">Recent Orders</h2>
+          <Link href="/admin/orders" className="text-xs font-semibold text-[#0369A1] hover:underline">
+            View all
+          </Link>
+        </div>
+        <AdminTable headers={["Order", "User", "Service", "Qty", "Charge", "Status", "Date"]}>
+          {recentOrders.map((o) => (
+            <tr key={o._id} className="transition-colors hover:bg-mist">
+              <td className="px-5 py-3 font-mono text-xs font-semibold text-brand-600">
+                #{String(o._id).slice(-8).toUpperCase()}
+              </td>
+              <td className="px-5 py-3">
+                <p className="max-w-[120px] truncate font-medium text-ink">{o.userId?.name ?? "—"}</p>
+                <p className="max-w-[120px] truncate text-xs text-slate-400">{o.userId?.email}</p>
+              </td>
+              <td className="max-w-[160px] truncate px-5 py-3 text-slate-600">{o.serviceId?.name ?? "—"}</td>
+              <td className="px-5 py-3 tabular-nums text-slate-600">{o.quantity.toLocaleString()}</td>
+              <td className="px-5 py-3 font-medium tabular-nums text-ink">{formatCurrency(o.charge)}</td>
+              <td className="px-5 py-3">
+                <Badge variant={statusVariant[o.status] ?? "outline"} className="capitalize">{o.status}</Badge>
+              </td>
+              <td className="whitespace-nowrap px-5 py-3 text-slate-500">{formatRelativeTime(o.createdAt)}</td>
+            </tr>
+          ))}
+        </AdminTable>
+      </div>
     </div>
   );
 }

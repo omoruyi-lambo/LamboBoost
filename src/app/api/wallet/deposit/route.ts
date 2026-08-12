@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
           amount: amount * 100, // Paystack uses kobo
           reference,
           callback_url: `${APP_URL}/api/wallet/verify`,
-          metadata: { userId: session.user.id, walletId: wallet._id.toString() },
+          metadata: { userId: session.user.id, walletId: String(wallet._id) },
         }),
       });
 
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
           redirect_url: `${APP_URL}/api/wallet/verify-fw`,
           customer: { email: session.user.email, name: session.user.name },
           customizations: { title: "LamboBoost Wallet Deposit" },
-          meta: { userId: session.user.id, walletId: wallet._id.toString() },
+          meta: { userId: session.user.id, walletId: String(wallet._id) },
         }),
       });
 

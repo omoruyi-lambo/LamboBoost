@@ -47,6 +47,8 @@ export function RegisterForm() {
         name: data.name,
         email: data.email,
         password: data.password,
+        confirmPassword: data.confirmPassword,
+        agreeToTerms: data.agreeToTerms,
       }),
     });
 
@@ -77,7 +79,7 @@ export function RegisterForm() {
     <div className="w-full max-w-md">
       <div className="rounded-2xl border border-border bg-white p-8 shadow-card">
         <div className="mb-8 text-center">
-          <h1 className="font-display text-2xl font-bold text-navy-900">
+          <h1 className="font-display text-2xl font-bold text-[#0F172A]">
             Create your account
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -144,7 +146,7 @@ export function RegisterForm() {
             {password && (
               <ul className="mt-2 space-y-1">
                 {passwordRules.map((rule) => (
-                  <li key={rule.label} className={cn("flex items-center gap-2 text-xs", rule.test(password) ? "text-emerald-600" : "text-muted-foreground")}>
+                  <li key={rule.label} className={cn("flex items-center gap-2 text-xs", rule.test(password) ? "text-[#2563EB]" : "text-muted-foreground")}>
                     <FontAwesomeIcon icon={faCheck} className={cn("h-3 w-3", rule.test(password) ? "opacity-100" : "opacity-0")} />
                     {rule.label}
                   </li>

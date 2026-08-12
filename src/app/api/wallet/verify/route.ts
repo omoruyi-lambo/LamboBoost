@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db/mongoose";
 import { Transaction, Wallet } from "@/lib/db/models";
-import { emailQueue, notificationQueue } from "@/lib/queue/queues";
+import { emailQueue, notificationQueue, safeAdd } from "@/lib/queue/queues";
 import { APP_URL } from "@/lib/constants";
 
 const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET_KEY!;
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
     });
 
     // Queue confirmation email + notification
-    await emailQueue.add("deposit-confirmed", {
+    await safeAdd(emailQueue, "deposit-confirmed", {
       type: "deposit-confirmed",
       userId: tx.userId.toString(),
       email: verifyData.data.customer.email,
@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
       reference,
     });
 
-    await notificationQueue.add("deposit-notif", {
+    await safeAdd(notificationQueue, "deposit-notif", {
       userId: tx.userId.toString(),
       type: "wallet",
       title: "Deposit successful",

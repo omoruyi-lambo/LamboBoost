@@ -47,19 +47,26 @@ async function seed() {
       { upsert: true, new: true }
     );
 
+    const serviceSlug = `${slugify(svc.name, { lower: true, strict: true })}-${slugify(svc.category, { lower: true, strict: true })}`;
     await Service.findOneAndUpdate(
       { providerId: provider._id, externalServiceId: svc.externalId },
       {
         categoryId: category._id,
         providerId: provider._id,
         externalServiceId: svc.externalId,
+        slug: serviceSlug,
         name: svc.name,
+        platform: svc.category,
         description: `${svc.name}. Minimum: ${svc.min.toLocaleString()}, Maximum: ${svc.max.toLocaleString()} units.`,
         pricePerUnit: svc.rate,
+        price: svc.rate,
         minQuantity: svc.min,
         maxQuantity: svc.max,
+        minimumQuantity: svc.min,
+        maximumQuantity: svc.max,
         estimatedDeliveryHours: svc.hours,
         isActive: true,
+        active: true,
       },
       { upsert: true, new: true }
     );

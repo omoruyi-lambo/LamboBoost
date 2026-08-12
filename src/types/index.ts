@@ -141,7 +141,10 @@ export interface IOrder {
   serviceId: string;
   service?: Pick<IService, "_id" | "name" | "pricePerUnit">;
   providerId: string;
+  providerOrderId?: string;
   externalOrderId?: string;
+  price: number;
+  target: string;
   status: OrderStatus;
   quantity: number;
   link: string;

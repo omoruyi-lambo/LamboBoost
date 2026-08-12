@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 520" fill="none" role="img" aria-label="">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="48%" r="55%">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0.32"/>
+      <stop offset="55%" stop-color="#1E3A8A" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#0B1220" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#2563EB" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#38BDF8" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="640" height="520" rx="32" fill="#0B1220"/>
+  <ellipse cx="320" cy="250" rx="300" ry="230" fill="url(#glow)"/>
+
+  <!-- fine connection network -->
+  <g stroke="#38BDF8" stroke-opacity="0.35" stroke-width="1">
+    <path d="M96 118 L216 192 L352 148"/>
+    <path d="M352 148 L516 242 L584 118"/>
+    <path d="M96 402 L232 342 L416 424 L564 344"/>
+    <path d="M216 192 L232 342"/>
+  </g>
+  <g fill="#38BDF8" opacity="0.75">
+    <circle cx="96" cy="118" r="5"/>
+    <circle cx="216" cy="192" r="4"/>
+    <circle cx="352" cy="148" r="5"/>
+    <circle cx="516" cy="242" r="4"/>
+    <circle cx="584" cy="118" r="5"/>
+    <circle cx="96" cy="402" r="4"/>
+    <circle cx="232" cy="342" r="5"/>
+    <circle cx="416" cy="424" r="4"/>
+    <circle cx="564" cy="344" r="5"/>
+  </g>
+
+  <!-- concentric rings -->
+  <circle cx="472" cy="300" r="72" stroke="#2563EB" stroke-opacity="0.5" stroke-width="1.5"/>
+  <circle cx="472" cy="300" r="48" stroke="#38BDF8" stroke-opacity="0.4" stroke-width="1.5"/>
+  <circle cx="472" cy="300" r="10" fill="#38BDF8" fill-opacity="0.8"/>
+
+  <!-- abstract interface card -->
+  <g>
+    <rect x="112" y="232" width="168" height="112" rx="18" stroke="#2563EB" stroke-opacity="0.65" stroke-width="1.5"/>
+    <rect x="132" y="254" width="64" height="9" rx="4.5" fill="#2563EB" fill-opacity="0.75"/>
+    <rect x="132" y="274" width="118" height="9" rx="4.5" fill="#38BDF8" fill-opacity="0.5"/>
+    <rect x="132" y="294" width="88" height="9" rx="4.5" fill="#64748B" fill-opacity="0.5"/>
+  </g>
+
+  <!-- small panel -->
+  <g>
+    <rect x="396" y="86" width="150" height="96" rx="16" stroke="#38BDF8" stroke-opacity="0.45" stroke-width="1.5"/>
+    <circle cx="422" cy="116" r="13" fill="#2563EB" fill-opacity="0.6"/>
+    <rect x="448" y="106" width="78" height="8" rx="4" fill="#94A3B8" fill-opacity="0.55"/>
+    <rect x="448" y="122" width="58" height="8" rx="4" fill="#64748B" fill-opacity="0.45"/>
+    <rect x="416" y="146" width="110" height="9" rx="4.5" fill="#38BDF8" fill-opacity="0.4"/>
+    <rect x="416" y="162" width="86" height="9" rx="4.5" fill="#2563EB" fill-opacity="0.35"/>
+  </g>
+</svg>

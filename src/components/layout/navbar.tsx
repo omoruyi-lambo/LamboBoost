@@ -40,21 +40,13 @@ export function Navbar() {
         "fixed inset-x-0 top-0 z-50 transition-all duration-200",
         solid
           ? "border-b border-[#E2E8F0] bg-white/95 shadow-[0_1px_2px_rgba(2,6,23,0.04)] backdrop-blur-sm"
-          : "border-b border-white/10 bg-[#0B1220]/20 backdrop-blur-sm"
+          : "border-b border-white/10 bg-[#0B1220]/80 backdrop-blur-md"
       )}
     >
       <div className="site-container flex h-16 items-center justify-between md:h-[72px]">
         <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="LamboBoost home">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-            <rect width="32" height="32" rx="8" fill="#2563EB" />
-            <path
-              d="M8.5 23L14 9.5L19 17.5L21.5 13L24 23"
-              stroke="white"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="LamboBoost logo" className="h-8 w-auto" />
           <span
             className={cn(
               "font-display text-[16px] font-bold tracking-normal transition-colors",
@@ -77,7 +69,7 @@ export function Navbar() {
                       ? isActive(link.href)
                         ? "bg-[#EFF6FF] text-[#2563EB]"
                         : "text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#0F172A]"
-                      : "text-white/76 hover:bg-white/10 hover:text-white"
+                      : "text-white/90 hover:bg-white/10 hover:text-white"
                   )}
                   aria-current={isActive(link.href) ? "page" : undefined}
                 >
@@ -100,7 +92,7 @@ export function Navbar() {
                 href="/login"
                 className={cn(
                   "inline-flex h-10 items-center rounded-lg px-4 text-[13px] font-semibold transition-colors",
-                  solid ? "text-[#334155] hover:bg-[#F8FAFC]" : "text-white/82 hover:bg-white/10 hover:text-white"
+                  solid ? "text-[#334155] hover:bg-[#F8FAFC]" : "text-white/90 hover:bg-white/10 hover:text-white"
                 )}
               >
                 Login
@@ -119,7 +111,7 @@ export function Navbar() {
             "inline-flex h-10 w-10 items-center justify-center rounded-lg transition-colors md:hidden",
             solid
               ? "text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#0F172A]"
-              : "text-white/80 hover:bg-white/10 hover:text-white"
+              : "text-white/90 hover:bg-white/10 hover:text-white"
           )}
           onClick={() => setIsOpen((value) => !value)}
           aria-label={isOpen ? "Close menu" : "Open menu"}

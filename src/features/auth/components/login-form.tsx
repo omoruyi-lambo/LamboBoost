@@ -55,7 +55,7 @@ export function LoginForm() {
     <div className="w-full max-w-md">
       <div className="rounded-2xl border border-border bg-white p-8 shadow-card">
         <div className="mb-8 text-center">
-          <h1 className="font-display text-2xl font-bold text-navy-900">
+          <h1 className="font-display text-2xl font-bold text-[#0F172A]">
             Welcome back
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">

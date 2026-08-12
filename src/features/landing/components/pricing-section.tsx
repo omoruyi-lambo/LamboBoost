@@ -1,62 +1,85 @@
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+"use client";
 
-const included = [
-  "Access to the full service catalog",
-  "Real-time order tracking",
-  "Flexible wallet balance payments",
-  "Complete transaction history",
-  "Support ticket access",
-  "No monthly subscription fees",
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { Calculator, SlidersHorizontal, Wallet } from "lucide-react";
+
+const points = [
+  {
+    title: "Per-service pricing",
+    description:
+      "Each service in the catalog shows its own unit rate. No tiers, no bundles — just the service you choose.",
+    icon: Calculator,
+  },
+  {
+    title: "Set your own quantity",
+    description:
+      "Every order has a minimum and maximum quantity. Your cost is the rate times the quantity you select.",
+    icon: SlidersHorizontal,
+  },
+  {
+    title: "Pay from your wallet",
+    description:
+      "Fund your wallet once and settle each order instantly with your balance. Top up whenever you need to.",
+    icon: Wallet,
+  },
 ];
 
 export function PricingSection() {
   return (
-    <section className="section-py bg-white" id="pricing" aria-labelledby="pricing-heading">
+    <section id="pricing" className="section-py bg-[#F8FAFC]">
       <div className="site-container">
-        <div className="mx-auto max-w-[640px] text-center">
+        <div className="section-header">
           <span className="section-label">Pricing</span>
-          <h2 id="pricing-heading" className="section-heading">
-            Transparent pricing designed for fast campaigns.
-          </h2>
-          <p className="section-subheading mt-4">
-            Pay only for the services you use. Every cost is shown before you confirm and your wallet balance makes checkout effortless.
+          <h2 className="section-heading">Pay for what you need.</h2>
+          <p className="section-subheading">
+            LamboBoost has no subscription plans. You only pay for the services and quantities you
+            actually order, and every cost is shown before you confirm.
           </p>
         </div>
 
-        <div className="mx-auto mt-12 max-w-[620px]">
-          <div className="rounded-[32px] border border-[#E2E8F0] bg-[#F8FAFC] p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
-            <div className="mb-7 border-b border-[#E2E8F0] pb-6">
-              <p className="mb-3 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#64748B]">
-                What you get
-              </p>
-              <p className="text-[14px] leading-7 text-[#475569]">
-                Everything you need to manage orders, wallet funding, and campaign performance from one dashboard.
-              </p>
-            </div>
-
-            <ul className="mb-8 space-y-4" role="list">
-              {included.map((item) => (
-                <li key={item} className="flex gap-3 text-[14px] leading-7 text-[#334155]">
-                  <FontAwesomeIcon icon={faCircleCheck} className="mt-1 h-4 w-4 flex-shrink-0 text-[#2563EB]" aria-hidden="true" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-
-            <Link
-              href="/register"
-              className="flex h-14 w-full items-center justify-center gap-2 rounded-[20px] bg-[#2563EB] px-6 text-[15px] font-semibold text-white transition-colors hover:bg-[#1D4ED8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
-            >
-              Start with a free account
-              <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" aria-hidden="true" />
-            </Link>
+        <div className="mx-auto max-w-[860px]">
+          <div className="grid gap-5 sm:grid-cols-3">
+            {points.map((point, index) => (
+              <motion.div
+                key={point.title}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ delay: index * 0.06, duration: 0.36, ease: "easeOut" }}
+                className="rounded-2xl border border-[#E2E8F0] bg-white p-6"
+              >
+                <point.icon
+                  className="h-6 w-6 text-[#2563EB]"
+                  strokeWidth={1.75}
+                  aria-hidden="true"
+                />
+                <h3 className="mt-4 text-[15px] font-semibold tracking-normal text-[#0F172A]">
+                  {point.title}
+                </h3>
+                <p className="mt-2 text-[13.5px] leading-6 text-[#64748B]">{point.description}</p>
+              </motion.div>
+            ))}
           </div>
 
-          <p className="mt-4 text-center text-[13px] text-[#64748B]">
-            Save time with pay-as-you-go access and get service pricing before you confirm every order.
-          </p>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ delay: 0.2, duration: 0.4, ease: "easeOut" }}
+            className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-[#E2E8F0] bg-white px-6 py-5 sm:flex-row"
+          >
+            <p className="text-center text-[14px] leading-6 text-[#475569] sm:text-left">
+              No monthly fees. No hidden charges. Create a free account and pay only when you place
+              an order.
+            </p>
+            <Link href="/register" className="btn-primary h-11 shrink-0 px-6 text-[13px]">
+              Get Started
+              <FontAwesomeIcon icon={faArrowRight} className="h-3.5 w-3.5" aria-hidden="true" />
+            </Link>
+          </motion.div>
         </div>
       </div>
     </section>

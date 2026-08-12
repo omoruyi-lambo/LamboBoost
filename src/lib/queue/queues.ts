@@ -58,3 +58,24 @@ export type NotificationJobData = {
   actionUrl?: string;
   metadata?: Record<string, unknown>;
 };
+
+/**
+ * Enqueue a job without letting a Redis outage break the primary action.
+ * Emails and notifications are best-effort: if the queue is unreachable,
+ * the job is skipped with a warning instead of throwing.
+ */
+export async function safeAdd<T extends Record<string, unknown>>(
+  queue: Queue,
+  name: string,
+  data: T,
+  opts?: { jobId?: string }
+): Promise<void> {
+  try {
+    await queue.add(name, data, opts);
+  } catch (err) {
+    console.warn(
+      `[queue] "${name}" job skipped (Redis unavailable):`,
+      (err as Error).message
+    );
+  }
+}

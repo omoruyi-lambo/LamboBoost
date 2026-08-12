@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db/mongoose";
-import { Service, Wallet, Order, Transaction, Notification } from "@/lib/db/models";
+import { Order } from "@/lib/db/models";
+import { orderQueue, emailQueue, notificationQueue, safeAdd } from "@/lib/queue/queues";
 import { createOrderSchema } from "@/lib/validations/order";
-import { orderQueue, emailQueue, notificationQueue } from "@/lib/queue/queues";
-import { generateReference } from "@/lib/utils";
+import { createOrderForUser } from "@/lib/services/order.service";
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,83 +20,41 @@ export async function POST(req: NextRequest) {
     await connectDB();
     const { serviceId, link, quantity } = parsed.data;
 
-    const service = await Service.findById(serviceId);
-    if (!service || !service.isActive) {
-      return NextResponse.json({ error: "Service not found or unavailable." }, { status: 404 });
-    }
-
-    if (quantity < service.minQuantity || quantity > service.maxQuantity) {
-      return NextResponse.json({
-        error: `Quantity must be between ${service.minQuantity} and ${service.maxQuantity}.`
-      }, { status: 400 });
-    }
-
-    const charge = parseFloat(((quantity / 1000) * service.pricePerUnit).toFixed(2));
-
-    const wallet = await Wallet.findOne({ userId: session.user.id });
-    if (!wallet || wallet.isLocked) {
-      return NextResponse.json({ error: "Wallet not found or is locked." }, { status: 400 });
-    }
-    if (wallet.balance < charge) {
-      return NextResponse.json({ error: "Insufficient wallet balance." }, { status: 400 });
-    }
-
-    // Deduct from wallet
-    const balanceBefore = wallet.balance;
-    await Wallet.findByIdAndUpdate(wallet._id, {
-      $inc: { balance: -charge, totalSpent: charge },
-    });
-
-    // Create transaction record
-    await Transaction.create({
-      userId: session.user.id,
-      walletId: wallet._id,
-      type: "order_payment",
-      status: "completed",
-      amount: charge,
-      balanceBefore,
-      balanceAfter: balanceBefore - charge,
-      currency: "NGN",
-      reference: generateReference("ORD"),
-      description: `Payment for ${service.name} (${quantity.toLocaleString()} units)`,
-    });
-
-    // Create the order
-    const order = await Order.create({
-      userId: session.user.id,
-      serviceId: service._id,
-      providerId: service.providerId,
-      status: "pending",
-      quantity,
+    const order = await createOrderForUser(session.user.id, {
+      serviceId,
       link,
-      charge,
+      quantity,
+      couponCode: parsed.data.couponCode,
+      notes: parsed.data.notes,
     });
+
+    const orderId = (order._id as unknown as string);
 
     // Queue the order with the provider
-    await orderQueue.add("place-order", {
+    await safeAdd(orderQueue, "place-order", {
       type: "place-order",
-      orderId: order._id.toString(),
+      orderId,
     });
 
     // Queue email + notification
-    await emailQueue.add("order-placed", {
+    await safeAdd(emailQueue, "order-placed", {
       type: "order-placed",
       userId: session.user.id,
       email: session.user.email!,
-      orderId: order._id.toString(),
+      orderId,
     });
 
-    await notificationQueue.add("order-placed-notif", {
+    await safeAdd(notificationQueue, "order-placed-notif", {
       userId: session.user.id,
       type: "order",
       title: "Order placed",
-      message: `Your order for ${service.name} has been placed and is being processed.`,
-      actionUrl: `/dashboard/orders/${order._id}`,
+      message: `Your order has been placed and is being processed.`,
+      actionUrl: `/dashboard/orders/${orderId}`,
     });
 
     return NextResponse.json({
       success: true,
-      data: { orderId: order._id.toString() },
+      data: { orderId: String(order._id) },
     }, { status: 201 });
   } catch (err) {
     console.error("[orders POST]", err);

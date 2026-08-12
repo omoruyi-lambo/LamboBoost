@@ -13,7 +13,7 @@ export const orderWorker = new Worker<OrderJobData>(
     const data = job.data;
 
     if (data.type === "place-order") {
-      const order = await Order.findById(data.orderId).populate("serviceId");
+      const order = (await Order.findById(data.orderId).populate("serviceId")) as any;
       if (!order) throw new Error(`Order ${data.orderId} not found`);
 
       const service = order.serviceId as { externalServiceId: string };

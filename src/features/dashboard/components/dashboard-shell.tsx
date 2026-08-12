@@ -54,31 +54,33 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
     href === "/dashboard" ? pathname === href : pathname.startsWith(href);
 
   const SidebarContent = () => (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col bg-white">
       {/* Logo */}
-      <div className="flex h-16 items-center border-b border-white/10 px-6">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-            <span className="text-[11px] font-bold text-white">L</span>
-          </div>
-          <span className="font-display font-bold text-white">LamboBoost</span>
+      <div className="flex h-16 items-center border-b border-line px-6">
+        <Link href="/" className="flex items-center gap-2.5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="LamboBoost logo" className="h-7 w-auto" />
+          <span className="font-display font-bold tracking-normal text-ink">LamboBoost</span>
         </Link>
       </div>
 
-      <ScrollArea className="flex-1 px-3 py-4">
+      <ScrollArea className="flex-1 px-3 py-5">
+        <p className="mb-2 px-3 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+          Menu
+        </p>
         {/* Main nav */}
         <nav aria-label="Main navigation">
-          <ul className="space-y-0.5" role="list">
+          <ul className="space-y-1" role="list">
             {navItems.map(({ label, href, icon }) => (
               <li key={href}>
                 <Link
                   href={href}
                   onClick={() => setSidebarOpen(false)}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                    "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
                     isActive(href)
-                      ? "bg-white/10 text-white"
-                      : "text-white/60 hover:bg-white/5 hover:text-white"
+                      ? "bg-brand-50 text-brand-600"
+                      : "text-slate-500 hover:bg-mist hover:text-ink"
                   )}
                   aria-current={isActive(href) ? "page" : undefined}
                 >
@@ -91,19 +93,20 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
         </nav>
 
         {/* Bottom nav */}
-        <div className="mt-6 border-t border-white/10 pt-4">
-          <ul className="space-y-0.5" role="list">
+        <div className="mt-6 border-t border-line pt-4">
+          <ul className="space-y-1" role="list">
             {bottomItems.map(({ label, href, icon }) => (
               <li key={href}>
                 <Link
                   href={href}
                   onClick={() => setSidebarOpen(false)}
                   className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                    "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
                     isActive(href)
-                      ? "bg-white/10 text-white"
-                      : "text-white/60 hover:bg-white/5 hover:text-white"
+                      ? "bg-brand-50 text-brand-600"
+                      : "text-slate-500 hover:bg-mist hover:text-ink"
                   )}
+                  aria-current={isActive(href) ? "page" : undefined}
                 >
                   <FontAwesomeIcon icon={icon} className="h-4 w-4 shrink-0" />
                   {label}
@@ -114,22 +117,37 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
         </div>
       </ScrollArea>
 
+      {/* Help card */}
+      <div className="mx-4 mb-4 rounded-2xl border border-line bg-ice p-4">
+        <p className="text-[13px] font-semibold text-ink">Need a hand?</p>
+        <p className="mt-1 text-xs leading-5 text-slate-500">
+          Our support team is here to help with orders and payments.
+        </p>
+        <Link
+          href="/dashboard/support"
+          className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 hover:text-brand-700"
+        >
+          Contact support
+          <FontAwesomeIcon icon={faCircleQuestion} className="h-3 w-3" aria-hidden="true" />
+        </Link>
+      </div>
+
       {/* User section */}
-      <div className="border-t border-white/10 p-3">
-        <div className="flex items-center gap-3 rounded-lg px-3 py-2">
-          <Avatar className="h-8 w-8 shrink-0">
+      <div className="border-t border-line p-3">
+        <div className="flex items-center gap-3 rounded-xl px-3 py-2">
+          <Avatar className="h-9 w-9 shrink-0">
             <AvatarImage src={user.image ?? undefined} alt={user.name ?? "User"} />
-            <AvatarFallback className="bg-primary/20 text-primary text-xs font-semibold">
+            <AvatarFallback className="bg-brand-50 text-brand-600 text-xs font-semibold">
               {getInitials(user.name ?? "U")}
             </AvatarFallback>
           </Avatar>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-white truncate">{user.name}</p>
-            <p className="text-xs text-white/50 truncate">{user.email}</p>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-medium text-ink">{user.name}</p>
+            <p className="truncate text-xs text-slate-400">{user.email}</p>
           </div>
           <button
             onClick={() => signOut({ callbackUrl: "/" })}
-            className="text-white/40 hover:text-white transition-colors"
+            className="text-slate-400 transition-colors hover:text-ink"
             aria-label="Sign out"
           >
             <FontAwesomeIcon icon={faRightFromBracket} className="h-4 w-4" />
@@ -140,10 +158,10 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
   );
 
   return (
-    <div className="flex h-screen bg-[#F8FAFC] overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-mist">
       {/* Desktop sidebar */}
       <aside
-        className="hidden lg:flex lg:w-64 lg:flex-col bg-navy-900 shrink-0"
+        className="hidden w-64 shrink-0 border-r border-line lg:flex lg:flex-col"
         aria-label="Sidebar"
       >
         <SidebarContent />
@@ -165,7 +183,7 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
               animate={{ x: 0 }}
               exit={{ x: -280 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed left-0 top-0 z-50 h-full w-64 bg-navy-900 lg:hidden"
+              className="fixed left-0 top-0 z-50 h-full w-64 lg:hidden"
               aria-label="Mobile sidebar"
             >
               <SidebarContent />
@@ -177,18 +195,18 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="flex h-16 items-center justify-between border-b border-border bg-white px-4 md:px-6 shrink-0">
+        <header className="flex h-16 shrink-0 items-center justify-between border-b border-line bg-white px-4 md:px-6">
           <button
-            className="lg:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted"
+            className="rounded-lg p-2 text-slate-500 hover:bg-mist hover:text-ink lg:hidden"
             onClick={() => setSidebarOpen(true)}
             aria-label="Open sidebar"
           >
             <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
           </button>
-          <div className="flex items-center gap-3 ml-auto">
+          <div className="ml-auto flex items-center gap-3">
             <Link
               href="/dashboard/notifications"
-              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors relative"
+              className="relative rounded-lg p-2 text-slate-500 transition-colors hover:bg-mist hover:text-ink"
               aria-label="Notifications"
             >
               <FontAwesomeIcon icon={faBell} className="h-5 w-5" />
@@ -196,7 +214,7 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
             <Link href="/dashboard/profile">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={user.image ?? undefined} alt={user.name ?? "User"} />
-                <AvatarFallback className="bg-blue-50 text-blue-700 text-xs font-semibold">
+                <AvatarFallback className="bg-brand-50 text-brand-600 text-xs font-semibold">
                   {getInitials(user.name ?? "U")}
                 </AvatarFallback>
               </Avatar>
@@ -206,9 +224,7 @@ export function DashboardShell({ user, children }: DashboardShellProps) {
 
         {/* Page content */}
         <main className="flex-1 overflow-y-auto">
-          <div className="container max-w-7xl py-8">
-            {children}
-          </div>
+          <div className="container max-w-7xl py-8">{children}</div>
         </main>
       </div>
     </div>

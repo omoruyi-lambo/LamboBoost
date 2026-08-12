@@ -43,7 +43,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const parsed = signInSchema.safeParse(credentials);
         if (!parsed.success) return null;
 
-        const { email, password } = parsed.data;
+        // Normalize the same way registration does, so quoted/padded
+        // emails still match the stored record.
+        const email = parsed.data.email.trim().replace(/^"|"$/g, "");
+        const { password } = parsed.data;
 
         await connectDB();
 

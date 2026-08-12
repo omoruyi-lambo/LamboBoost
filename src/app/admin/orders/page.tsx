@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { connectDB } from "@/lib/db/mongoose";
 import { Order } from "@/lib/db/models";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
+import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
+import { AdminTable } from "@/features/admin/components/admin-table";
 
 export const metadata: Metadata = { title: "Admin — Orders" };
 
@@ -23,44 +24,29 @@ export default async function AdminOrdersPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-bold text-navy-900">Orders</h1>
-      <Card>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border">
-                  {["ID", "User", "Service", "Qty", "Charge", "Status", "Date"].map((h) => (
-                    <th key={h} className="text-left px-6 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {orders.map((o) => {
-                  const user = o.userId as { name: string; email: string } | null;
-                  const service = o.serviceId as { name: string } | null;
-                  return (
-                    <tr key={o._id.toString()} className="hover:bg-muted/30">
-                      <td className="px-6 py-3 font-mono text-xs text-primary">#{o._id.toString().slice(-8).toUpperCase()}</td>
-                      <td className="px-6 py-3">
-                        <p className="font-medium truncate max-w-[120px]">{user?.name}</p>
-                        <p className="text-xs text-muted-foreground">{user?.email}</p>
-                      </td>
-                      <td className="px-6 py-3 truncate max-w-[160px]">{service?.name ?? "—"}</td>
-                      <td className="px-6 py-3">{o.quantity.toLocaleString()}</td>
-                      <td className="px-6 py-3 font-medium">{formatCurrency(o.charge)}</td>
-                      <td className="px-6 py-3">
-                        <Badge variant={statusVariant[o.status] ?? "outline"} className="capitalize">{o.status}</Badge>
-                      </td>
-                      <td className="px-6 py-3 text-muted-foreground whitespace-nowrap">{formatDateTime(o.createdAt as unknown as string)}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
+      <AdminPageHeader title="Orders" description={`${orders.length} most recent orders across the platform.`} />
+      <AdminTable headers={["ID", "User", "Service", "Qty", "Charge", "Status", "Date"]}>
+        {orders.map((o) => {
+          const user = o.userId as unknown as { name: string; email: string } | null;
+          const service = o.serviceId as unknown as { name: string } | null;
+          return (
+            <tr key={o._id.toString()} className="transition-colors hover:bg-ice/60">
+              <td className="px-5 py-3 font-mono text-xs font-semibold text-brand-600">#{o._id.toString().slice(-8).toUpperCase()}</td>
+              <td className="px-5 py-3">
+                <p className="max-w-[120px] truncate font-medium text-ink">{user?.name}</p>
+                <p className="max-w-[120px] truncate text-xs text-slate-400">{user?.email}</p>
+              </td>
+              <td className="max-w-[160px] truncate px-5 py-3 text-slate-600">{service?.name ?? "—"}</td>
+              <td className="px-5 py-3 tabular-nums text-slate-600">{o.quantity.toLocaleString()}</td>
+              <td className="px-5 py-3 font-medium tabular-nums text-ink">{formatCurrency(o.charge)}</td>
+              <td className="px-5 py-3">
+                <Badge variant={statusVariant[o.status] ?? "outline"} className="capitalize">{o.status}</Badge>
+              </td>
+              <td className="whitespace-nowrap px-5 py-3 text-slate-500">{formatDateTime(o.createdAt as unknown as string)}</td>
+            </tr>
+          );
+        })}
+      </AdminTable>
     </div>
   );
 }

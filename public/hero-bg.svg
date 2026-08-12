@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" width="1600" height="1000" role="img" aria-label="Abstract digital network background">
+  <defs>
+    <radialGradient id="core" cx="58%" cy="32%" r="70%">
+      <stop offset="0%" stop-color="#1E3A8A" stop-opacity="0.34" />
+      <stop offset="45%" stop-color="#172554" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="#0B1220" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="vignette" cx="50%" cy="46%" r="82%">
+      <stop offset="58%" stop-color="#0B1220" stop-opacity="0" />
+      <stop offset="100%" stop-color="#0B1220" stop-opacity="0.92" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="#0B1220" />
+  <rect width="1600" height="1000" fill="url(#core)" />
+
+  <!-- faint interface grid -->
+  <g stroke="#2563EB" stroke-opacity="0.05" stroke-width="1">
+    <path d="M0 200H1600" />
+    <path d="M0 400H1600" />
+    <path d="M0 600H1600" />
+    <path d="M0 800H1600" />
+    <path d="M200 0V1000" />
+    <path d="M400 0V1000" />
+    <path d="M600 0V1000" />
+    <path d="M800 0V1000" />
+    <path d="M1000 0V1000" />
+    <path d="M1200 0V1000" />
+    <path d="M1400 0V1000" />
+  </g>
+
+  <!-- subtle geometric structures -->
+  <g fill="none" stroke-width="1">
+    <circle cx="1310" cy="180" r="160" stroke="#38BDF8" stroke-opacity="0.11" />
+    <circle cx="1310" cy="180" r="104" stroke="#2563EB" stroke-opacity="0.15" />
+    <circle cx="1310" cy="180" r="52" stroke="#38BDF8" stroke-opacity="0.09" />
+    <rect x="118" y="640" width="224" height="150" rx="18" stroke="#2563EB" stroke-opacity="0.13" />
+    <rect x="138" y="662" width="184" height="42" rx="9" stroke="#38BDF8" stroke-opacity="0.10" />
+    <rect x="144" y="720" width="70" height="8" rx="4" stroke="#2563EB" stroke-opacity="0.16" />
+    <rect x="224" y="720" width="50" height="8" rx="4" stroke="#2563EB" stroke-opacity="0.10" />
+    <circle cx="330" cy="230" r="92" stroke="#2563EB" stroke-opacity="0.09" stroke-dasharray="1 5" />
+  </g>
+
+  <!-- network cluster A (upper right) -->
+  <g stroke="#60A5FA" stroke-opacity="0.16" stroke-width="0.75">
+    <path d="M1050 160L1150 120L1240 200L1130 280Z" />
+    <path d="M1150 120L1330 140L1240 200" />
+    <path d="M1240 200L1200 340" />
+    <path d="M1330 140L1420 220" />
+  </g>
+  <g fill="#38BDF8" fill-opacity="0.40">
+    <circle cx="1050" cy="160" r="2.4" />
+    <circle cx="1150" cy="120" r="2.8" />
+    <circle cx="1240" cy="200" r="3.2" />
+    <circle cx="1130" cy="280" r="2.2" />
+    <circle cx="1330" cy="140" r="2.6" />
+    <circle cx="1200" cy="340" r="2" />
+    <circle cx="1420" cy="220" r="2.2" />
+  </g>
+
+  <!-- network cluster B (left middle) -->
+  <g stroke="#60A5FA" stroke-opacity="0.14" stroke-width="0.75">
+    <path d="M520 540L620 500L720 560L630 640Z" />
+    <path d="M620 500L820 520L720 560" />
+    <path d="M720 560L760 720" />
+    <path d="M820 520L900 600" />
+    <path d="M520 540L430 640L630 640" />
+  </g>
+  <g fill="#60A5FA" fill-opacity="0.34">
+    <circle cx="520" cy="540" r="2.4" />
+    <circle cx="620" cy="500" r="2.8" />
+    <circle cx="720" cy="560" r="3.2" />
+    <circle cx="630" cy="640" r="2.2" />
+    <circle cx="820" cy="520" r="2.6" />
+    <circle cx="760" cy="720" r="2" />
+    <circle cx="900" cy="600" r="2.2" />
+    <circle cx="430" cy="640" r="2.4" />
+  </g>
+
+  <!-- network cluster C (lower right) -->
+  <g stroke="#38BDF8" stroke-opacity="0.13" stroke-width="0.75">
+    <path d="M1150 760L1260 720L1360 780L1250 860Z" />
+    <path d="M1260 720L1460 740L1360 780" />
+    <path d="M1360 780L1350 920" />
+  </g>
+  <g fill="#38BDF8" fill-opacity="0.32">
+    <circle cx="1150" cy="760" r="2.2" />
+    <circle cx="1260" cy="720" r="2.6" />
+    <circle cx="1360" cy="780" r="3" />
+    <circle cx="1250" cy="860" r="2" />
+    <circle cx="1460" cy="740" r="2.4" />
+    <circle cx="1350" cy="920" r="2.2" />
+  </g>
+
+  <!-- scattered data points -->
+  <g fill="#93C5FD" fill-opacity="0.26">
+    <circle cx="470" cy="330" r="1.6" />
+    <circle cx="700" cy="240" r="1.4" />
+    <circle cx="880" cy="120" r="1.8" />
+    <circle cx="1560" cy="480" r="1.6" />
+    <circle cx="1500" cy="620" r="1.4" />
+    <circle cx="260" cy="470" r="1.6" />
+    <circle cx="960" cy="900" r="1.8" />
+    <circle cx="80" cy="860" r="1.4" />
+    <circle cx="560" cy="120" r="1.5" />
+    <circle cx="1240" cy="560" r="1.6" />
+  </g>
+
+  <rect width="1600" height="1000" fill="url(#vignette)" />
+</svg>

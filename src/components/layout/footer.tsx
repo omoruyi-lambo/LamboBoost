@@ -17,16 +17,8 @@ export function Footer() {
         <div className="mb-12 grid grid-cols-2 gap-8 md:grid-cols-6 lg:gap-12">
           <div className="col-span-2 md:col-span-2">
             <Link href="/" className="mb-4 inline-flex items-center gap-2.5" aria-label="LamboBoost home">
-              <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                <rect width="32" height="32" rx="8" fill="#2563EB" />
-                <path
-                  d="M8.5 23L14 9.5L19 17.5L21.5 13L24 23"
-                  stroke="white"
-                  strokeWidth="2.4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.png" alt="LamboBoost logo" className="h-7 w-auto" />
               <span className="font-display text-[16px] font-bold tracking-normal text-white">LamboBoost</span>
             </Link>
 

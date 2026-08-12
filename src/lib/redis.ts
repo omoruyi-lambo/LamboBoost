@@ -11,6 +11,9 @@ function createRedisClient(): Redis {
   const client = new Redis(REDIS_URL, {
     maxRetriesPerRequest: null, // required for BullMQ
     enableReadyCheck: false,
+    // Fail fast when Redis is unreachable so BullMQ jobs don't hang requests
+    // (queue.add() would otherwise buffer commands offline forever).
+    enableOfflineQueue: false,
     lazyConnect: true,
   });
 

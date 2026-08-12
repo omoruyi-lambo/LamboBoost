@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db/mongoose";
-import { Order } from "@/lib/db/models";
+import { Order, Wallet } from "@/lib/db/models";
 import { getProviderManager } from "@/lib/providers";
+import { adjustWalletBalance } from "@/lib/services/wallet.service";
 
 export async function GET(
   _req: NextRequest,
@@ -60,10 +61,23 @@ export async function PATCH(
     return NextResponse.json({ error: "This order cannot be cancelled." }, { status: 400 });
   }
 
-  // Try to cancel with provider
+  // Attempt provider cancellation if the order is already created externally.
   if (order.externalOrderId) {
     const manager = getProviderManager();
     await manager.cancelOrder(order.externalOrderId).catch(() => false);
+  }
+
+  const wallet = await Wallet.findOne({ userId: order.userId });
+  if (wallet) {
+    await adjustWalletBalance({
+      userId: String(order.userId),
+      walletId: String(wallet._id),
+      amount: order.charge,
+      type: "refund",
+      description: `Refund for cancelled order ${String(order._id)}`,
+      orderId: String(order._id),
+      status: "completed",
+    });
   }
 
   await Order.findByIdAndUpdate(id, { status: "cancelled", cancelledAt: new Date() });

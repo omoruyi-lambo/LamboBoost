@@ -73,6 +73,20 @@ const config: Config = {
           700: "#172554", // deep blue
           600: "#1E2F56",
         },
+        // Legacy alias for the pre-existing navy-* classes used across
+        // dashboard/admin content pages (text-navy-900, bg-navy-900).
+        navy: {
+          50:  "#EFF6FF",
+          100: "#DBEAFE",
+          200: "#BFDBFE",
+          300: "#93C5FD",
+          400: "#60A5FA",
+          500: "#3B82F6",
+          600: "#2563EB",
+          700: "#1D4ED8",
+          800: "#1E3A8A",
+          900: "#0B1220", // dark navy text / button background
+        },
         sky: {
           400: "#38BDF8", // sky blue accent
         },

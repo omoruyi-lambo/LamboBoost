@@ -48,10 +48,8 @@ const NotificationSchema = new Schema<INotificationDocument>(
     },
   },
   {
-    timestamps: true,
+    timestamps: { createdAt: true, updatedAt: false },
     versionKey: false,
-    // Only keep createdAt, not updatedAt
-    updatedAt: false,
   }
 );
 

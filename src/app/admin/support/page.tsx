@@ -42,7 +42,7 @@ export default async function AdminSupportPage() {
               </thead>
               <tbody className="divide-y divide-border">
                 {tickets.map((t) => {
-                  const user = t.userId as { name: string; email: string } | null;
+                  const user = t.userId as unknown as { name: string; email: string } | null;
                   return (
                     <tr key={t._id.toString()} className="hover:bg-muted/30">
                       <td className="px-6 py-4">

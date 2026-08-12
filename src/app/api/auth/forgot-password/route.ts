@@ -3,7 +3,7 @@ import crypto from "crypto";
 import { connectDB } from "@/lib/db/mongoose";
 import { User } from "@/lib/db/models";
 import { forgotPasswordSchema } from "@/lib/validations/auth";
-import { emailQueue } from "@/lib/queue/queues";
+import { emailQueue, safeAdd } from "@/lib/queue/queues";
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,14 +22,15 @@ export async function POST(req: NextRequest) {
     }
 
     const token = crypto.randomBytes(32).toString("hex");
-    await User.findByIdAndUpdate(user._id, {
+    const userId = String(user._id);
+    await User.findByIdAndUpdate(userId, {
       passwordResetToken: token,
       passwordResetExpires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
     });
 
-    await emailQueue.add("reset-password", {
+    await safeAdd(emailQueue, "reset-password", {
       type: "reset-password",
-      userId: user._id.toString(),
+      userId,
       name: user.name,
       email: user.email,
       token,

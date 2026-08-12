@@ -79,9 +79,8 @@ export function ProductMockup() {
         <aside className="hidden w-[232px] shrink-0 flex-col border-r border-[#E2E8F0] bg-[#0F172A] md:flex">
           <div className="flex h-12 items-center border-b border-white/[0.08] px-5">
             <div className="flex items-center gap-3">
-              <div className="flex h-7 w-7 items-center justify-center rounded-2xl bg-[#2563EB] text-[11px] font-bold text-white">
-                L
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.png" alt="" className="h-6 w-auto" />
               <span className="text-[13px] font-semibold tracking-normal text-white">LamboBoost</span>
             </div>
           </div>

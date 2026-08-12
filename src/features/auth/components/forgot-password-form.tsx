@@ -42,10 +42,10 @@ export function ForgotPasswordForm() {
     return (
       <div className="w-full max-w-md">
         <div className="rounded-2xl border border-border bg-white p-8 shadow-card text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#EFF6FF]">
             <FontAwesomeIcon icon={faEnvelope} className="h-6 w-6 text-primary" />
           </div>
-          <h1 className="font-display text-2xl font-bold text-navy-900 mb-2">
+          <h1 className="font-display text-2xl font-bold text-[#0F172A] mb-2">
             Check your email
           </h1>
           <p className="text-sm text-muted-foreground mb-6">
@@ -74,7 +74,7 @@ export function ForgotPasswordForm() {
             <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
             Back to sign in
           </Link>
-          <h1 className="font-display text-2xl font-bold text-navy-900">
+          <h1 className="font-display text-2xl font-bold text-[#0F172A]">
             Forgot your password?
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">

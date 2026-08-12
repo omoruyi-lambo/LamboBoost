@@ -23,6 +23,9 @@ yarn-error.log*
 
 # Misc
 .DS_Store
+
+# Freebuff tooling (local only)
+.freebuff/
 *.pem
 .vercel
 *.tsbuildinfo

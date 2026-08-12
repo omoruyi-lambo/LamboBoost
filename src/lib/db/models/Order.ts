@@ -6,6 +6,9 @@ export interface IOrderDocument extends Document {
   serviceId: Types.ObjectId;
   providerId: Types.ObjectId;
   externalOrderId?: string;
+  providerOrderId?: string;
+  price: number;
+  target: string;
   status: OrderStatus;
   quantity: number;
   link: string;
@@ -40,6 +43,20 @@ const OrderSchema = new Schema<IOrderDocument>(
     externalOrderId: {
       type: String,
       sparse: true,
+    },
+    providerOrderId: {
+      type: String,
+      sparse: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+      min: [0, "Price must be at least 0"],
+    },
+    target: {
+      type: String,
+      required: [true, "Target is required"],
+      maxlength: 2000,
     },
     status: {
       type: String,
