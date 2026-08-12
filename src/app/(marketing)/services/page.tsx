@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   description: "Browse all available digital marketing services.",
 };
 
+// Render per-request so the catalog always reflects the live database
+// (services added via the admin panel appear immediately, no redeploy).
+export const dynamic = "force-dynamic";
+
 export default async function ServicesPage() {
   await connectDB();
   const [services, categories] = await Promise.all([

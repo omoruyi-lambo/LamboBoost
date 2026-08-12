@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db/mongoose";
 import { User, Wallet } from "@/lib/db/models";
 import { signUpSchema } from "@/lib/validations/auth";
-import { emailQueue, notificationQueue, safeAdd } from "@/lib/queue/queues";
+import { safeAdd } from "@/lib/queue/queues";
 
 export async function POST(req: NextRequest) {
   try {
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const wallet = await Wallet.create({ userId: userId });
 
     // Queue welcome email
-    await safeAdd(emailQueue, "welcome", {
+    await safeAdd("email", "welcome", {
       type: "welcome",
       userId,
       name: user.name,
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Queue welcome notification
-    await safeAdd(notificationQueue, "welcome-notif", {
+    await safeAdd("notification", "welcome-notif", {
       userId,
       type: "system",
       title: "Welcome to LamboBoost!",

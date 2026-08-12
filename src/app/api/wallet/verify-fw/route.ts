@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db/mongoose";
 import { Transaction, Wallet } from "@/lib/db/models";
-import { emailQueue, notificationQueue, safeAdd } from "@/lib/queue/queues";
+import { safeAdd } from "@/lib/queue/queues";
 import { APP_URL } from "@/lib/constants";
 
 const FW_SECRET = process.env.FLUTTERWAVE_SECRET_KEY!;
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
       balanceAfter: wallet.balance,
     });
 
-    await safeAdd(emailQueue, "deposit-confirmed-fw", {
+    await safeAdd("email", "deposit-confirmed-fw", {
       type: "deposit-confirmed",
       userId: tx.userId.toString(),
       email: verifyData.data.customer.email,
@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
       reference: txRef,
     });
 
-    await safeAdd(notificationQueue, "deposit-notif-fw", {
+    await safeAdd("notification", "deposit-notif-fw", {
       userId: tx.userId.toString(),
       type: "wallet",
       title: "Deposit successful",

@@ -3,7 +3,7 @@ import crypto from "crypto";
 import { connectDB } from "@/lib/db/mongoose";
 import { User } from "@/lib/db/models";
 import { forgotPasswordSchema } from "@/lib/validations/auth";
-import { emailQueue, safeAdd } from "@/lib/queue/queues";
+import { safeAdd } from "@/lib/queue/queues";
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       passwordResetExpires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
     });
 
-    await safeAdd(emailQueue, "reset-password", {
+    await safeAdd("email", "reset-password", {
       type: "reset-password",
       userId,
       name: user.name,

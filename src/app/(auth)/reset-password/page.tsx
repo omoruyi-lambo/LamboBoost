@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { AuthPageShell } from "@/features/auth/components/auth-page-shell";
 import { ResetPasswordForm } from "@/features/auth/components/reset-password-form";
 
@@ -13,7 +14,9 @@ export default function ResetPasswordPage() {
       helpLink="/forgot-password"
       helpLabel="Request new link"
     >
-      <ResetPasswordForm />
+      <Suspense fallback={null}>
+        <ResetPasswordForm />
+      </Suspense>
     </AuthPageShell>
   );
 }

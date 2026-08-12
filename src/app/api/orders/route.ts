@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db/mongoose";
 import { Order } from "@/lib/db/models";
-import { orderQueue, emailQueue, notificationQueue, safeAdd } from "@/lib/queue/queues";
+import { safeAdd } from "@/lib/queue/queues";
 import { createOrderSchema } from "@/lib/validations/order";
 import { createOrderForUser } from "@/lib/services/order.service";
 
@@ -31,20 +31,20 @@ export async function POST(req: NextRequest) {
     const orderId = (order._id as unknown as string);
 
     // Queue the order with the provider
-    await safeAdd(orderQueue, "place-order", {
+    await safeAdd("order", "place-order", {
       type: "place-order",
       orderId,
     });
 
     // Queue email + notification
-    await safeAdd(emailQueue, "order-placed", {
+    await safeAdd("email", "order-placed", {
       type: "order-placed",
       userId: session.user.id,
       email: session.user.email!,
       orderId,
     });
 
-    await safeAdd(notificationQueue, "order-placed-notif", {
+    await safeAdd("notification", "order-placed-notif", {
       userId: session.user.id,
       type: "order",
       title: "Order placed",

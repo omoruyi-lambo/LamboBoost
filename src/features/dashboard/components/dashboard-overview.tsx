@@ -66,7 +66,7 @@ export function DashboardOverview({ data, user }: Props) {
           Good {getGreeting()}, {(user.name ?? "there").split(" ")[0]}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Here's what's happening with your account.
+          Here&apos;s what&apos;s happening with your account.
         </p>
       </div>
 

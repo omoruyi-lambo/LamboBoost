@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { AuthPageShell } from "@/features/auth/components/auth-page-shell";
 import { LoginForm } from "@/features/auth/components/login-form";
 
@@ -16,7 +17,9 @@ export default function LoginPage() {
       helpLink="/forgot-password"
       helpLabel="Forgot password?"
     >
-      <LoginForm />
+      <Suspense fallback={null}>
+        <LoginForm />
+      </Suspense>
     </AuthPageShell>
   );
 }

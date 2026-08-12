@@ -1,39 +1,54 @@
-import { Queue } from "bullmq";
+import { Queue, type QueueOptions } from "bullmq";
 import redis from "@/lib/redis";
 
-const connection = redis;
+// Queues are created LAZILY, not at module scope. BullMQ's Queue constructor
+// issues commands eagerly, so constructing at import time attempts a Redis
+// connection. Next.js preloads route modules during static generation, which
+// would crash the build (and any cold start) when Redis is unreachable.
+// Lazily creating queues keeps module import side-effect free.
 
 // ─── Queue Definitions ──────────────────────────────────────────────────────
 
-export const emailQueue = new Queue("email", {
-  connection,
-  defaultJobOptions: {
-    attempts: 3,
-    backoff: { type: "exponential", delay: 2000 },
-    removeOnComplete: { count: 100 },
-    removeOnFail: { count: 200 },
-  },
-});
+export type QueueName = "email" | "order" | "notification";
 
-export const orderQueue = new Queue("orders", {
-  connection,
-  defaultJobOptions: {
-    attempts: 3,
-    backoff: { type: "exponential", delay: 3000 },
-    removeOnComplete: { count: 200 },
-    removeOnFail: { count: 500 },
+const queueOptions: Record<QueueName, QueueOptions> = {
+  email: {
+    connection: redis,
+    defaultJobOptions: {
+      attempts: 3,
+      backoff: { type: "exponential", delay: 2000 },
+      removeOnComplete: { count: 100 },
+      removeOnFail: { count: 200 },
+    },
   },
-});
+  order: {
+    connection: redis,
+    defaultJobOptions: {
+      attempts: 3,
+      backoff: { type: "exponential", delay: 3000 },
+      removeOnComplete: { count: 200 },
+      removeOnFail: { count: 500 },
+    },
+  },
+  notification: {
+    connection: redis,
+    defaultJobOptions: {
+      attempts: 2,
+      backoff: { type: "fixed", delay: 1000 },
+      removeOnComplete: { count: 50 },
+      removeOnFail: { count: 100 },
+    },
+  },
+};
 
-export const notificationQueue = new Queue("notifications", {
-  connection,
-  defaultJobOptions: {
-    attempts: 2,
-    backoff: { type: "fixed", delay: 1000 },
-    removeOnComplete: { count: 50 },
-    removeOnFail: { count: 100 },
-  },
-});
+const queues: Partial<Record<QueueName, Queue>> = {};
+
+export function getQueue(name: QueueName): Queue {
+  if (!queues[name]) {
+    queues[name] = new Queue(name, queueOptions[name]);
+  }
+  return queues[name];
+}
 
 // ─── Job Type Definitions ────────────────────────────────────────────────────
 
@@ -65,13 +80,13 @@ export type NotificationJobData = {
  * the job is skipped with a warning instead of throwing.
  */
 export async function safeAdd<T extends Record<string, unknown>>(
-  queue: Queue,
+  queue: QueueName,
   name: string,
   data: T,
   opts?: { jobId?: string }
 ): Promise<void> {
   try {
-    await queue.add(name, data, opts);
+    await getQueue(queue).add(name, data, opts);
   } catch (err) {
     console.warn(
       `[queue] "${name}" job skipped (Redis unavailable):`,
