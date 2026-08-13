@@ -17,9 +17,9 @@ import { signInSchema } from "@/lib/validations/auth";
 // Raw MongoDB client for Auth.js adapter (required by @auth/mongodb-adapter)
 // Lazy connect so missing URI in dev doesn't crash at import time
 const client = new MongoClient(process.env.MONGODB_URI ?? "mongodb://localhost:27017/lamboboost");
-const clientPromise = client.connect().catch((err) => {
-  console.warn("[auth] MongoDB connection failed:", err.message);
-  return client;
+const clientPromise = client.connect().catch(err => {
+  console.error("[auth] MongoClient connection failed. Ensure MONGODB_URI is set and the deployment IP is whitelisted in Atlas. Error:", err.message.split('\n')[0]); // Sanitize error message
+  throw err; // Re-throw to fail fast and prevent the app from running with a bad DB connection.
 });
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -31,7 +31,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Google({
       clientId: process.env.AUTH_GOOGLE_ID!,
       clientSecret: process.env.AUTH_GOOGLE_SECRET!,
-      allowDangerousEmailAccountLinking: true,
     }),
     Credentials({
       name: "credentials",
